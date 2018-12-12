@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neo.dao.ChatDao">
+
+  <insert id="saveEntity" parameterType="com.neo.entity.MessageEntity">
+    insert into `message`
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="msg_id != null">
+        msg_id,
+      </if>
+      <if test="timestamp != null">
+        timestamp,
+      </if>
+      <if test="sendtime != null">
+        sendtime,
+      </if>
+      <if test="from_user != null">
+        from_user,
+      </if>
+      <if test="from_user_id != null">
+        from_user_id,
+      </if>
+      <if test="to_user != null">
+        to_user,
+      </if>
+      <if test="to_user_id != null">
+        to_user_id,
+      </if>
+      <if test="chat_type != null">
+        chat_type,
+      </if>
+      <if test="group_id != null">
+        group_id,
+      </if>
+      <if test="group_name != null">
+        group_name,
+      </if>
+      <if test="ext != null">
+        ext,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="msg_id != null">
+        #{msg_id,jdbcType=VARCHAR},
+      </if>
+      <if test="timestamp != null">
+        #{timestamp,jdbcType=BIGINT},
+      </if>
+      <if test="sendtime != null">
+        #{sendtime,jdbcType=VARCHAR},
+      </if>
+      <if test="from_user != null">
+        #{from_user,jdbcType=VARCHAR},
+      </if>
+      <if test="from_user_id != null">
+        #{from_user_id,jdbcType=VARCHAR},
+      </if>
+      <if test="to_user != null">
+        #{to_user,jdbcType=VARCHAR},
+      </if>
+      <if test="to_user_id != null">
+        #{to_user_id,jdbcType=VARCHAR},
+      </if>
+      <if test="chat_type != null">
+        #{chat_type,jdbcType=VARCHAR},
+      </if>
+      <if test="group_id != null">
+        #{group_id,jdbcType=VARCHAR},
+      </if>
+      <if test="group_name != null">
+        #{group_name,jdbcType=VARCHAR},
+      </if>
+      <if test="ext != null">
+        #{ext,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+</mapper>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neo.dao.UserDao">
+
+  <select id="findUserByUserName" parameterType="java.lang.String" resultType="com.neo.entity.UserEntity">
+    select * from user
+    where username = #{name,jdbcType=VARCHAR}
+  </select>
+
+  <select id="findUserByToken" parameterType="java.lang.String" resultType="com.neo.entity.UserEntity">
+    select * from user
+    where auth_token = #{access_token,jdbcType=VARCHAR}
+  </select>
+
+  <select id="findUsersByName" parameterType="java.lang.String" resultType="com.neo.entity.UserEntity">
+    select * from user
+    <if test="name != null">
+	    where username = #{name,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+  <select id="selectAll" resultType="com.neo.entity.UserEntity">
+    select
+	id,
+	username,
+	avatar,
+	sign,
+	nickname
+	from user
+  </select>
+  
+  <insert id="saveEntity" parameterType="com.neo.entity.UserEntity">
+    insert into `user`
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="auth_token != null">
+        auth_token,
+      </if>
+      <if test="auth_date != null">
+        auth_date,
+      </if>
+      <if test="sign != null">
+        sign,
+      </if>
+      <if test="avatar != null">
+        avatar,
+      </if>
+      <if test="nickname != null">
+        nickname,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="auth_token != null">
+        #{auth_token,jdbcType=VARCHAR},
+      </if>
+      <if test="auth_date != null">
+        #{auth_date,jdbcType=VARCHAR},
+      </if>
+      <if test="sign != null">
+        #{sign,jdbcType=VARCHAR},
+      </if>
+      <if test="avatar != null">
+        #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+</mapper>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neo.dao.GroupUserDao">
+
+  <select id="findGroupUserByUserId" parameterType="java.lang.String" resultType="com.neo.entity.GroupUser">
+    select * from `group_user`
+    where user_id = #{userId, jdbcType=VARCHAR}
+  </select>
+
+  <select id="findUsersByGroupId" parameterType="java.lang.String" resultType="com.neo.entity.GroupUser">
+    select * from `group_user`
+    where group_id = #{group_id, jdbcType=VARCHAR}
+  </select>
+  
+  <select id="saveEntity" parameterType="com.neo.entity.GroupUser">
+    insert into `group_user` (
+    id,
+    group_id,
+    user_id,
+    username,
+    avatar,
+    sign,
+    createTime
+    )
+    values (
+    #{id,jdbcType=VARCHAR},
+    #{group_id,jdbcType=VARCHAR},
+    #{user_id,jdbcType=VARCHAR},
+    #{username,jdbcType=VARCHAR},
+    #{avatar,jdbcType=VARCHAR},
+    #{sign,jdbcType=VARCHAR},
+    #{createTime,jdbcType=VARCHAR}
+    )
+  </select>
+  
+</mapper>
