@@ -1,0 +1,66 @@
+#spring.application.name=spirng-chat
+#spring.data.mongodb.uri=mongodb://192.168.0.33:27017/springchat
+#server.port=8080
+server:
+  port: 8080
+spring:
+  application:
+    name: spring-chat
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/chat?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true
+    username: root
+    password: 123456
+#    initialSize: 20
+#    minIdle: 10
+#    maxActive: 100
+  user:
+    datasource:
+      type: com.alibaba.druid.pool.DruidDataSource
+      driverClassName: com.mysql.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/chat?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true
+      username: root
+      password: 123456
+  #    initialSize: 20
+  #    minIdle: 10
+  #    maxActive: 100
+  http:
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
+  tomcat:
+    uri-encoding: UTF-8
+  mvc:
+    throw-exception-if-no-handler-found: true
+    favicon:
+      enabled: false
+    static-path-pattern: /static/**
+  resources:
+    static-locations: classpath:/static/,file:${web.upload-path}
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.neo.dao
+
+# IM info
+im:
+  server:
+    host: 127.0.0.1
+    port: 9006
+    
+#出现错误时, 直接抛出异常
+
+#spring.mvc.throw-exception-if-no-handler-found=true
+#spring.mvc.favicon.enabled=false
+
+#spring.resources.add-mappings=false
+#server.sessionTimeout=10
+#favicon.ico放置在src/main/resources/static下
+# 文件上传配置
+#spring.http.multipart.max-file-size=15MB
+#spring.http.multipart.max-request-size=15MB
+#web.upload-path=/Users/liudong/Downloads/111111111/
+#spring.mvc.static-path-pattern=/static/**
+#spring.resources.static-locations=classpath:/static/,file:${web.upload-path}

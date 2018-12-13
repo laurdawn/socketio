@@ -3,46 +3,36 @@
 <mapper namespace="com.neo.dao.GroupDao">
 
   <select id="findEntityById" parameterType="java.lang.String" resultType="com.neo.entity.GroupEntity">
-    select * from `group`
+    select * from `im_group`
     where id = #{id, jdbcType=VARCHAR}
   </select>
 
-  <select id="findGroupsByGroupName" parameterType="java.lang.String" resultType="com.neo.entity.GroupEntity">
-    select * from `group`
-    where groupname = #{groupName, jdbcType=VARCHAR}
+  <select id="findGroupsByName" parameterType="java.lang.String" resultType="com.neo.entity.GroupEntity">
+    select * from `im_group`
+    where name = #{name, jdbcType=VARCHAR}
   </select>
 
-  <select id="findGroupByUserId" parameterType="java.lang.String" resultType="com.neo.entity.GroupEntity">
-    select * from `group`
-    where user_id = #{user_id, jdbcType=VARCHAR}
-  </select>
-
-  <select id="findGroupUserByUserId" parameterType="java.lang.String" resultType="com.neo.entity.GroupUser">
-    select * from group_user
-    where user_id = #{user_id, jdbcType=VARCHAR}
-  </select>
-
-  <select id="findUsersByGroupId" parameterType="java.lang.String" resultType="com.neo.entity.GroupUser">
-    select * from group_user
-    where group_id = #{group_id, jdbcType=VARCHAR}
+  <select id="findGroupByOwnerId" parameterType="java.lang.String" resultType="com.neo.entity.GroupEntity">
+    select * from `im_group`
+    where ownerId = #{ownerId, jdbcType=VARCHAR}
   </select>
 
   <select id="saveEntity" parameterType="com.neo.entity.GroupEntity">
-    insert into `group` (
+    insert into `im_group` (
     id,
-    groupname,
-    user_id,
-    user_name,
-    avatar,
-    creat_date
+    name,
+    ownerId,
+    ownerName,
+    iconUrl,
+    createTime
     )
     values (
     #{id,jdbcType=VARCHAR},
-    #{groupname,jdbcType=VARCHAR},
-    #{user_id,jdbcType=VARCHAR},
-    #{user_name,jdbcType=VARCHAR},
-    #{avatar,jdbcType=VARCHAR},
-    #{creat_date,jdbcType=VARCHAR}
+    #{name,jdbcType=VARCHAR},
+    #{ownerId,jdbcType=VARCHAR},
+    #{ownerName,jdbcType=VARCHAR},
+    #{iconUrl,jdbcType=VARCHAR},
+    now()
     )
   </select>
 

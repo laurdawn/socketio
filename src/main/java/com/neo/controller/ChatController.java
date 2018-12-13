@@ -1,20 +1,20 @@
 package com.neo.controller;
 
-import com.neo.entity.MessageEntity;
-import com.neo.enums.EResultType;
-import com.neo.serivce.ChatSerivice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.neo.enums.EResultType;
+import com.neo.serivce.ChatService;
+
 
 @Controller
 @RequestMapping(value = "/chat")
-public class ChatController extends BaseController<MessageEntity> {
+public class ChatController extends BaseController {
 
     @Autowired
-    ChatSerivice chatSerivice;
+    ChatService chatService;
 
     @ResponseBody
     @RequestMapping(value = "/t")
@@ -25,7 +25,7 @@ public class ChatController extends BaseController<MessageEntity> {
     @ResponseBody
     @RequestMapping(value = "/t4")
     public String tests() {
-        chatSerivice.sendApnData();
+        chatService.sendApnData();
         return retResultData(EResultType.SUCCESS);
     }
 

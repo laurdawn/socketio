@@ -20,14 +20,14 @@ import com.corundumstudio.socketio.annotation.OnConnect;
 import com.corundumstudio.socketio.annotation.OnDisconnect;
 import com.corundumstudio.socketio.annotation.OnEvent;
 import com.neo.entity.AddMessage;
-import com.neo.entity.GroupEntity;
-import com.neo.entity.GroupUser;
-import com.neo.entity.MessageEntity;
-import com.neo.entity.UserEntity;
-import com.neo.serivce.AddMessageSerivice;
-import com.neo.serivce.ChatSerivice;
-import com.neo.serivce.GroupSerivice;
-import com.neo.serivce.UserSerivice;
+import com.neo.entity.Group;
+import com.neo.entity.GroupMember;
+import com.neo.entity.Message;
+import com.neo.entity.User;
+import com.neo.serivce.SysmsgService;
+import com.neo.serivce.ChatService;
+import com.neo.serivce.GroupService;
+import com.neo.serivce.UserService;
 import com.neo.utils.DateUtils;
 import com.neo.utils.SessionUtil;
 
@@ -39,16 +39,16 @@ public class MessageEventHandler {
     private Logger logger = LogManager.getLogger(getClass().getName());
 
     @Autowired
-    private UserSerivice userSerivice;
+    private UserService userService;
 
     @Autowired
-    private ChatSerivice chatSerivice;
+    private ChatService chatService;
 
     @Autowired
-    private GroupSerivice groupSerivice;
+    private GroupService groupService;
 
     @Autowired
-    private AddMessageSerivice addMessageSerivice;
+    private SysmsgService addMessageService;
 
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss:SSS");
@@ -62,7 +62,7 @@ public class MessageEventHandler {
     @OnConnect
     public void onConnect(SocketIOClient client) {
         String auth_token = client.getHandshakeData().getSingleUrlParam("auth_token");
-        UserEntity userEntity = userSerivice.findUserByToken(auth_token);
+        User userEntity = userService.findUserByToken(auth_token);
         String userId = userEntity.getId();
         String userName = userEntity.getUsername();
         client.set("userId", userId);
@@ -70,10 +70,10 @@ public class MessageEventHandler {
         SessionUtil.userId_socket_Map.put(userId, client);
 
         //上线关联所在的群组
-        List<GroupEntity> entityList = groupSerivice.findMyGroupsByUserId(userId);
+        List<Group> entityList = groupService.findMyGroupsByUserId(userId);
 
-        for (GroupEntity entity : entityList) {
-            logger.info(userName + "自动关联了群 " + entity.getGroupname() + "   " + sdf.format(new Date()));
+        for (Group entity : entityList) {
+            logger.info(userName + "自动关联了群 " + entity.getName() + "   " + sdf.format(new Date()));
             client.joinRoom(entity.getId());
         }
 
@@ -111,9 +111,9 @@ public class MessageEventHandler {
 
         String id = msg.getToUid();
         //查询群下面的所有人  如果有当前群包含了 自己则说明是重复加群
-        List<GroupUser> groupUsers = groupSerivice.findUsersByGroupId(msg.getGroupId());
-        for (GroupUser user : groupUsers) {
-            if (user.getUser_id().equals(msg.getFromUid())) {
+        List<GroupMember> groupUsers = groupService.findMembersByGroupId(msg.getGroupId());
+        for (GroupMember user : groupUsers) {
+            if (user.getUserId().equals(msg.getFromUid())) {
                 ackRequest.sendAckData("请勿重复加群");
                 logger.info("重复加群了。。。。。。兄弟");
                 return;
@@ -121,7 +121,7 @@ public class MessageEventHandler {
         }
 
         ackRequest.sendAckData("");
-        addMessageSerivice.saveAddMessage(msg);
+        addMessageService.saveAddMessage(msg);
 
         if (!StringUtils.isEmpty(id) && SessionUtil.userId_socket_Map.containsKey(id)) {
             SocketIOClient socketIOClient = SessionUtil.userId_socket_Map.get(id);
@@ -137,7 +137,7 @@ public class MessageEventHandler {
         ackRequest.sendAckData("");
 
         String id = object.getString("toUid");
-        addMessageSerivice.updateAddMessage(object.getString("messageBoxId"));
+        addMessageService.updateAddMessage(object.getString("messageBoxId"));
 //
         if (!StringUtils.isEmpty(id) && SessionUtil.userId_socket_Map.containsKey(id)) {
             SocketIOClient socketIOClient = SessionUtil.userId_socket_Map.get(id);
@@ -153,11 +153,13 @@ public class MessageEventHandler {
 
         String id = object.getString("toUid");
         String groupId = object.getString("groupId");
-        UserEntity entity = (UserEntity) userSerivice.findUserById(id);
+        
+        User user = userService.findUserById(id);
+        Group group = groupService.findGroupById(groupId);
 
         ackRequest.sendAckData("");
 
-        addMessageSerivice.updateAddMessage(entity, groupId, object.getString("messageBoxId"));
+        addMessageService.updateAddMessage(user, group, object.getString("messageBoxId"));
 //
         if (!StringUtils.isEmpty(id) && SessionUtil.userId_socket_Map.containsKey(id)) {
             SocketIOClient socketIOClient = SessionUtil.userId_socket_Map.get(id);
@@ -174,7 +176,7 @@ public class MessageEventHandler {
      * @param msg
      */
     @OnEvent(value = "leave")
-    public void onEventLeave(SocketIOClient client, AckRequest ackRequest, MessageEntity msg) {
+    public void onEventLeave(SocketIOClient client, AckRequest ackRequest, Message msg) {
 
     }
 
@@ -186,7 +188,7 @@ public class MessageEventHandler {
      */
     //消息接收入口，当接收到消息后，查找发送目标客户端，并且向该客户端发送消息，且给自己发送消息
     @OnEvent(value = "chat")
-    public void onEvent(SocketIOClient client, AckRequest ackRequest, MessageEntity msg) {
+    public void onEvent(SocketIOClient client, AckRequest ackRequest, Message msg) {
 
         boolean isChat = msg.getChat_type().toString().equals("chat");
 
@@ -199,7 +201,7 @@ public class MessageEventHandler {
             }
 
             //将数据保存到服务器
-            chatSerivice.saveMessageData(msg);
+            chatService.saveMessageData(msg);
 
             String toName = "";
             if (isChat) {

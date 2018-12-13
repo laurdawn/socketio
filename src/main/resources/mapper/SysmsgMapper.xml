@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neo.dao.SysmsgDao">
+
+  <insert id="saveEntity" parameterType="com.neo.entity.Sysmsg">
+    insert into `im_sysmsg` (
+	    sendId,
+	    receiverId,
+	    reason,
+	    type,
+	    content,
+	    isDone,
+	    groupId,
+	    read,
+	    createTime
+    )
+    values (
+	    #{sendId,jdbcType=VARCHAR},
+	    #{receiverId,jdbcType=VARCHAR},
+	    #{reason,jdbcType=VARCHAR},
+	    #{type,jdbcType=VARCHAR},
+	    #{content,jdbcType=VARCHAR},
+	    #{isDone,jdbcType=VARCHAR},
+	    #{groupId,jdbcType=VARCHAR},
+	    #{read,jdbcType=VARCHAR},
+	    now()
+    )
+  </insert>
+  
+  <update id="updateEntity" parameterType="com.neo.entity.Sysmsg">
+	update settlemant
+    <set>
+      <if test="sendId != null">
+        sendId = #{sendId,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverId != null">
+        receiverId = #{receiverId,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null">
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="isDone != null">
+        isDone = #{isDone,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        groupId = #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="read != null">
+        read = #{read,jdbcType=VARCHAR},
+      </if>
+      <if test="handleTime != null">
+        handleTime = #{handleTime,jdbcType=VARCHAR},
+      </if>
+      <if test="readTime != null">
+        readTime = #{readTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <delete id="deleteEntity" parameterType="java.lang.Integer">
+    delete from `im_sysmsg`
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <update id="updateStateEntity" parameterType="com.neo.entity.Sysmsg">
+	update `im_sysmsg`
+    <set>
+	    <choose>
+	      <when test="isDone != null and isDone == '1'">
+	        isDone = #{isDone,jdbcType=VARCHAR},
+		    handleTime = now(),
+	      </when>
+	      <otherwise>
+	      	isDone = #{isDone,jdbcType=VARCHAR},
+	      </otherwise>
+	    </choose>
+	    <choose>
+	      <when test="read != null and read == '1'">
+	        read = #{read,jdbcType=VARCHAR},
+	        readTime = now(),
+	      </when>
+	      <otherwise>
+	      	isDone = #{isDone,jdbcType=VARCHAR},
+	      </otherwise>
+	    </choose>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectEntityById" parameterType="java.lang.Integer" resultType="com.neo.entity.Sysmsg">
+  	select * from `im_sysmsg`
+  	where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectSysmsgByReceiverId" parameterType="java.lang.String" resultType="com.neo.entity.Sysmsg">
+  	select * from `im_sysmsg`
+  	where receiverId = #{receiverId,jdbcType=INTEGER}
+  </select>
+  
+</mapper>

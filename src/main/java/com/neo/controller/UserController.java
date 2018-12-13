@@ -6,32 +6,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.neo.entity.UserEntity;
+import com.neo.entity.User;
 import com.neo.enums.EResultType;
-import com.neo.serivce.GroupSerivice;
-import com.neo.serivce.UserSerivice;
+import com.neo.serivce.GroupService;
+import com.neo.serivce.UserService;
 
 import io.netty.util.internal.StringUtil;
 
 @Controller
 @RequestMapping(value = "/user")
-public class UserController extends BaseController<UserEntity> {
+public class UserController extends BaseController {
 
     @Value("${server.port}")
     private Integer port;
 
     @Autowired
-    UserSerivice userSerivice;
+    UserService userService;
 
     @Autowired
-    GroupSerivice groupSerivice;
+    GroupService groupService;
 
 
     /**
@@ -49,7 +48,7 @@ public class UserController extends BaseController<UserEntity> {
             return retResultData(-1, "用户名或密码不能为空");
         }
 
-        UserEntity user = userSerivice.findUserByUserName(name);
+        User user = userService.findUserByUserName(name);
         if (user != null) {
             if (!user.getPassword().equals(password)) {
                 return retResultData(EResultType.PASSWORK_ERROR);
@@ -63,23 +62,23 @@ public class UserController extends BaseController<UserEntity> {
     }
 
     // 注册
-    @ResponseBody
-    @GetMapping(value = "/register")
-    public String register(String name, String password, String avatar) {
-
-        if (StringUtil.isNullOrEmpty(name) || StringUtil.isNullOrEmpty(password)) {
-            return retResultData(-1, "用户名或密码不能为空");
-        }
-
-        UserEntity user = userSerivice.findUserByUserName(name);
-        if (user != null) {
-            return retResultData(-1, "用户名已存在");
-        }
-
-        user = userSerivice.register(name, password, avatar);
-
-        return retResultData(EResultType.SUCCESS, user);
-    }
+//    @ResponseBody
+//    @GetMapping(value = "/register")
+//    public String register(String name, String password, String avatar) {
+//
+//        if (StringUtil.isNullOrEmpty(name) || StringUtil.isNullOrEmpty(password)) {
+//            return retResultData(-1, "用户名或密码不能为空");
+//        }
+//
+//        UserEntity user = userSerivice.findUserByUserName(name);
+//        if (user != null) {
+//            return retResultData(-1, "用户名已存在");
+//        }
+//
+//        user = userSerivice.register(name, password, avatar);
+//
+//        return retResultData(EResultType.SUCCESS, user);
+//    }
 
     //退出登录
     @RequestMapping(value = "/logout")
@@ -98,16 +97,16 @@ public class UserController extends BaseController<UserEntity> {
 
 
     //修改 个性签名
-    @ResponseBody
-    @PostMapping(value = "/updateSign")
-    public String updateSign(String sign) {
-
-        UserEntity entity = getSessionUser();
-        entity = (UserEntity) userSerivice.findUserById(entity.getId());
-        entity.setSign(sign);
-        userSerivice.saveUser(entity);
-        return retResultData(0, "修改成功");
-    }
+//    @ResponseBody
+//    @PostMapping(value = "/updateSign")
+//    public String updateSign(String sign) {
+//
+//        UserEntity entity = getSessionUser();
+//        entity = (UserEntity) userSerivice.findUserById(entity.getId());
+//        entity.setSign(sign);
+//        userSerivice.saveUser(entity);
+//        return retResultData(0, "修改成功");
+//    }
 
 
     /**
@@ -121,7 +120,7 @@ public class UserController extends BaseController<UserEntity> {
     public String findAllUser() {
 
         //获取所有的群组
-        UserEntity userEntity = getSessionUser();
+        User userEntity = getSessionUser();
 
         JSONObject obj = new JSONObject();
         obj.put("mine", userEntity);
@@ -131,11 +130,11 @@ public class UserController extends BaseController<UserEntity> {
         JSONObject f = new JSONObject();
         f.put("groupname", "我的好友");
         f.put("id", "0");
-        f.put("list", userSerivice.findAllUser());
+        f.put("list", userService.findAllUser());
         array.add(f);
         obj.put("friend", array);
 
-        obj.put("group", groupSerivice.findMyGroupsByUserId(userEntity.getId()));
+        obj.put("group", groupService.findMyGroupsByUserId(userEntity.getId()));
 
         return retResultData(0, "", obj);
     }
@@ -150,7 +149,7 @@ public class UserController extends BaseController<UserEntity> {
     @RequestMapping(method = RequestMethod.GET, value = "/findUsersByName")
     public String findUsersByName(String name) {
 
-        List<UserEntity> list = userSerivice.findUsersByName(name);
+        List<User> list = userService.findUsersByName(name);
         return retResultData(0, "", list);
     }
 

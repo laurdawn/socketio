@@ -1,6 +1,6 @@
 package com.neo.entity;
 
-public class UserEntity extends BaseEntity {
+public class User extends BaseEntity {
 
 //    userId: Number,
 //    name: String,
@@ -20,7 +20,7 @@ public class UserEntity extends BaseEntity {
     private String auth_token;   //token
     private String auth_date;   //过期时间
     private String sign;        //我的签名
-    private String avatar;      //头像
+    private String iconUrl;      //头像
     private String nickname;    //昵称
     private int sex;            //性别 0 男，1，女 2，其他
 
@@ -82,14 +82,6 @@ public class UserEntity extends BaseEntity {
         this.sign = sign;
     }
 
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
     public String getNickname() {
         return nickname;
     }
@@ -107,8 +99,16 @@ public class UserEntity extends BaseEntity {
                 ", auth_token='" + auth_token + '\'' +
                 ", auth_date='" + auth_date + '\'' +
                 ", sign='" + sign + '\'' +
-                ", avatar='" + avatar + '\'' +
+                ", avatar='" + iconUrl + '\'' +
                 ", nickname='" + nickname + '\'' +
                 '}';
     }
+
+	public String getIconUrl() {
+		return iconUrl;
+	}
+
+	public void setIconUrl(String iconUrl) {
+		this.iconUrl = iconUrl;
+	}
 }

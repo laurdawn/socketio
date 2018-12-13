@@ -4,17 +4,17 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.neo.entity.GroupEntity;
+import com.neo.entity.Group;
 
 @Component
-public interface GroupDao extends BaseDao<GroupEntity> {
+public interface GroupDao extends BaseDao<Group> {
 	
     /**
      * 根据群的名字查询所有的群
      *
      * @return
      */
-    List<GroupEntity> findGroupsByGroupName(String groupName);
+    List<Group> findGroupsByName(String name);
 
 
     /**
@@ -23,6 +23,6 @@ public interface GroupDao extends BaseDao<GroupEntity> {
      * @return
      */
 //    List<GroupEntity> findMyGroupsByUserId(String userId);
-    List<GroupEntity> findGroupByUserId(String userId);
+    List<Group> findGroupByOwnerId(String ownerId);
     
 }

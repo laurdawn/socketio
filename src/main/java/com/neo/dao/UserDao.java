@@ -5,16 +5,16 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
-import com.neo.entity.UserEntity;
+import com.neo.entity.User;
 
 @Component
-public interface UserDao extends BaseDao<UserEntity> {
+public interface UserDao extends BaseDao<User> {
 
     //根据名称查询 user
-    UserEntity findUserByUserName(String name);
+    User findUserByUserName(String name);
 
     //根据Token查询 user
-    UserEntity findUserByToken(String access_token);
+    User findUserByToken(String access_token);
 
 
     /**
@@ -22,5 +22,12 @@ public interface UserDao extends BaseDao<UserEntity> {
      *
      * @return
      */
-    List<UserEntity> findUsersByName(@Param("name") String name);
+    List<User> findUsersByName(@Param("name") String name);
+    
+    /**
+     * 通过批量用户id批量查询用户信息
+     * @param list
+     * @return
+     */
+    List<User> selectUsersById(List<String> list);
 }

@@ -2,10 +2,10 @@ package com.neo.dao;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.neo.entity.GpsData;
-import com.neo.entity.GroupEntity;
-import com.neo.entity.UserEntity;
-import com.neo.serivce.GroupSerivice;
-import com.neo.serivce.UserSerivice;
+import com.neo.entity.Group;
+import com.neo.entity.User;
+import com.neo.serivce.GroupService;
+import com.neo.serivce.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,31 +22,31 @@ import javax.servlet.http.HttpSession;
 public class UserDaoTest {
 
     @Autowired
-    private UserSerivice serivice;
+    private UserService serivice;
 
     @Autowired
-    private GroupSerivice groupSerivice;
+    private GroupService groupSerivice;
 
     @Autowired
     protected HttpSession session;
 
-    @Test
-    public void testSaveUser() throws Exception {
-
-
-        UserEntity user = serivice.register("123", "111", "http://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg");
-        System.out.println("已生成ID：" + user.getId());
-        user = serivice.register("111", "111", "http://tva4.sinaimg.cn/crop.0.1.1125.1125.180/475bb144jw8f9nwebnuhkj20v90vbwh9.jpg");
-        System.out.println("已生成ID：" + user.getId());
-        user = serivice.register("马云", "111", "http://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg");
-        System.out.println("已生成ID：" + user.getId());
-
-        user = serivice.register("刘流", "111", "http://tva1.sinaimg.cn/crop.0.0.512.512.180/6a4acad5jw8eqi6yaholjj20e80e8t9f.jpg");
-        System.out.println("已生成ID======：" + user.getId());
-
-        creatGroup();
-
-    }
+//    @Test
+//    public void testSaveUser() throws Exception {
+//
+//
+//        User user = serivice.register("123", "111", "http://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg");
+//        System.out.println("已生成ID：" + user.getId());
+//        user = serivice.register("111", "111", "http://tva4.sinaimg.cn/crop.0.1.1125.1125.180/475bb144jw8f9nwebnuhkj20v90vbwh9.jpg");
+//        System.out.println("已生成ID：" + user.getId());
+//        user = serivice.register("马云", "111", "http://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg");
+//        System.out.println("已生成ID：" + user.getId());
+//
+//        user = serivice.register("刘流", "111", "http://tva1.sinaimg.cn/crop.0.0.512.512.180/6a4acad5jw8eqi6yaholjj20e80e8t9f.jpg");
+//        System.out.println("已生成ID======：" + user.getId());
+//
+//        creatGroup();
+//
+//    }
 
     @Test
     public void creatGroup() throws Exception {
@@ -56,10 +56,10 @@ public class UserDaoTest {
 //        user.setPassword("456");
 //        serivice.saveEntity(user);
 
-        UserEntity user = serivice.findUserByUserName("123");
+        User user = serivice.findUserByUserName("123");
         session.setAttribute("username", user);
 
-        GroupEntity entity = groupSerivice.creatGroup("前端群", "http://tva1.sinaimg.cn/crop.0.0.200.200.50/006q8Q6bjw8f20zsdem2mj305k05kdfw.jpg", user);
+        Group entity = groupSerivice.creatGroup("前端群", "http://tva1.sinaimg.cn/crop.0.0.200.200.50/006q8Q6bjw8f20zsdem2mj305k05kdfw.jpg", user);
         System.out.println("已生成ID：" + entity.getId());
 
         entity = groupSerivice.creatGroup("后端群", "http://tva2.sinaimg.cn/crop.0.0.199.199.180/005Zseqhjw1eplix1brxxj305k05kjrf.jpg", user);

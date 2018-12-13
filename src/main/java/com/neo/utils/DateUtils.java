@@ -3,9 +3,6 @@ package com.neo.utils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by liudong on 2018/6/20.
- */
 public class DateUtils {
 
     /**

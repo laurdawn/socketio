@@ -2,7 +2,7 @@ package com.neo.entity;
 
 import com.neo.enums.Chat_type;
 
-public class MessageEntity extends BaseEntity {
+public class Message extends BaseEntity {
 
 //        msg_id: String,            //消息id uuid
 //        timestamp: Number,        //发送(服务器)时间

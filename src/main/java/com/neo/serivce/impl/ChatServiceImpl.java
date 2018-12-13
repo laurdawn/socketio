@@ -10,8 +10,8 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import com.neo.dao.ChatDao;
-import com.neo.entity.MessageEntity;
-import com.neo.serivce.ChatSerivice;
+import com.neo.entity.Message;
+import com.neo.serivce.ChatService;
 import com.turo.pushy.apns.ApnsClient;
 import com.turo.pushy.apns.ApnsClientBuilder;
 import com.turo.pushy.apns.PushNotificationResponse;
@@ -23,13 +23,13 @@ import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 
 @Component
-public class ChatSeriviceImpl implements ChatSerivice {
+public class ChatServiceImpl implements ChatService {
 
 	@Autowired
 	private ChatDao chatDao;
 	
     @Override
-    public void saveMessageData(MessageEntity entity) {
+    public void saveMessageData(Message entity) {
         long time = new Date().getTime();
         entity.setTimestamp(time);
         chatDao.saveEntity(entity);
